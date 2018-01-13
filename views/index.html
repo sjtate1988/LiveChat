@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Simple Chatroom!</title>
+    <link rel="stylesheet" href="stylesheets/style.css"/>
+</head>
+<body >
+
+    <h1> Simple Chatroom</h1>
+<!--  This displays over the whole webpage before a user provides their
+      username. -->
+    <div id="loginDiv" >
+        <h1 id="nicknameInst"> Please provide your nickname </h1>
+<!--    The input from this box is then sent to the server and added to the
+      username list. -->
+        <input type="text" id="userNameInput" onkeypress="userNameSubmit(event)" />
+        <button id="userNameSubmit">Submit</button>
+    </div>
+<!--  This is the main chatroom with all the functionality.
+      This is only displayed once the log in section has been completed. -->
+    <div id="userList">
+        <h2> User List </h2>
+    </div>
+<!--  This is the container for the messages in the chatroom. -->
+    <div id="chatroomBox" >
+
+    </div>
+<!--  This provides the client input text and allows the client to submit
+      their message and to log out. -->
+    <input type="text" id="clientInput" placeholder="message" onkeypress="clientInput(event)"/>
+    <button id="submitButton"> Submit </button>
+    <button id ="logoutButton"> Log Out </button>
+<!--  We use the jquery library for ease of selecting DOM elements. -->
+    <script src = 'http://unpkg.com/jquery'></script>
+<!--  We use the socket.io javascript file to make our custom events. -->
+    <script src="socket.io/socket.io.js"></script>
+<!--  This script is where the custom events are created and triggered in
+      connection with the route file index.js  -->
+    <script>
+//  We define the two variables: userName to hold the data of the user on the
+//  particular socket; and socket to store the socket functionality.
+        var userName = '';
+        var socket = io.connect('http://localhost:2000');
+//  The userNameSubmit function is triggered when the client logs on.
+//  It triggers first the client name to be submitted to the server and stored
+//  and then the removal of the log in div that covers the whole page.
+        $('#userNameSubmit').on('click', function(){
+            socket.emit('login_client', $('#userNameInput').val());
+            $('#loginDiv').attr('style', 'display: none;');
+        });
+//      This function checks whether the user clicks enter and triggers submit
+//      if the user presses enter.
+        function userNameSubmit(event){
+          var keyPressed = event.which || event.keyCode;
+          console.log(keyPressed);
+          if(keyPressed==13){
+            $('#userNameSubmit').trigger('click');
+          }
+        }
+// Provide a gretting to the user once they have logged in.
+// Update the collection of online users and the number of users.
+        socket.on('logged_in', function(data){
+            $('#chatroomBox').append("<p>" + data.greeting + ' ' + data.clientName[data.numClients] + '!' + "</p>");
+            userName=data.clientName[data.numClients];
+            if(data.numClients>0) {
+                for (var k = 0; k < data.numClients; k++) {
+                    $('#userList').append("<p>" + data.clientName[k] + "</p>");
+                }
+            }
+        });
+// Update the user list sidebar. Add a message to everyone about the new user who has logged in.
+        socket.on('onlineUsers', function(data) {
+          if (data.message){
+            $('#chatroomBox').append("<p>"+ data.message + "<p>");
+          }
+          $('#userList').empty();
+          $('#userList').append("<h2> User List </h2>");
+          for (var i=0; i<data.clients.length; i++){
+            $('#userList').append("<p>" + data.clients[i] + "</p>");
+          }
+            socket.emit('userList', {clients: data.clients});
+        });
+// When the submit button is clicked add the message to everyone's chatroom main box.
+// First the message and client name are sent to the server side.
+        $('#submitButton').on('click', function(){
+            socket.emit('client_message', {message: $('#clientInput').val(), clientName: userName});
+            $('#clientInput').clear();
+        });
+//      This function checks whether the user clicks enter and triggers submit
+//      if the user presses enter.
+        function clientInput(event){
+          var keyPressed = event.which || event.keyCode;
+          console.log(keyPressed);
+          if(keyPressed==13){
+            $('#submitButton').trigger('click');
+          }
+        }
+//      This function appends the 'username: message' to the chatroom box for all
+//      logged in clients.
+        socket.on('screen_input', function(data){
+           $('#chatroomBox').append("<p>" + data + "</p>");
+        });
+// This instigates the log out function from the server side.
+        $('#logoutButton').on('click', function(){
+          socket.emit('logout', {clientName: userName});
+          $('#chatroomBox').empty();
+          $('#loginDiv').attr('style', 'display: block;');
+        });
+        socket.on('userLeft', function(data){
+          $('#chatroomBox').append("<p>"+data.client+' has logged out! </p>');
+        });
+    </script>
+
+</body>
+</html>

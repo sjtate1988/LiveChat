@@ -1,0 +1,118 @@
+body {
+  padding: 50px;
+  font: 20px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url('http://ak7.picdn.net/shutterstock/videos/1410607/thumb/1.jpg');
+  background-repeat: no-repeat;
+  background-size: 1400px auto;
+
+}
+
+a {
+  color: #00B7FF;
+}
+
+#loginDiv {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1000;
+  opacity: 1;
+  background-color: rgba(100,0,0,1);
+  text-align: center;
+  color: white;
+}
+
+#chatroomBox {
+  height: 400px;
+  width: 850px;
+  border: 2px solid #000000;
+  background-color: rgba(0, 100, 255, 0.8);
+  font-size: 20px;
+  color: white;
+  overflow-y: scroll;
+  margin: 8px 270px;
+  padding-left: 12px;
+}
+
+h1 {
+  font-size: 40px;
+  color: ivory;
+  text-align: center;
+  background-color: rgba(100,0,255,0.8);
+  padding: 10px 20px;
+  margin: 0 auto;
+  width: -moz-fit-content;
+}
+#userList{
+  width: 200px;
+  height: 400px;
+  float: left;
+  background-color: rgba(250,0,100,0.8);
+  overflow-y:scroll;
+  color: rgb(0,0,180);
+  margin: 8px auto;
+}
+#clientInput {
+  width: 650px;
+  margin-left: 270px;
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+#submitButton {
+  background-color: rgba(0,0,255,0.9);
+}
+#userNameSubmit {
+  background-color: rgba(0,0,255,0.9);
+}
+
+#logoutButton {
+  background-color: rgba(250,0,0,0.9);
+}
+
+button {
+  font-size: 20px;
+  width: auto;
+  border: white;
+  border-style: ridge;
+  border-width: medium;
+  color: white;
+  height: 40px;
+}
+
+#submitButton:hover {
+  border: rgba(0,0,255,0.6);
+}
+#logoutButton:hover {
+  border: rgba(250,0,0,0.6);
+}
+#userNameSubmit:hover {
+  bborder: rgba(0,0,255,0.6);
+}
+
+#userNameInput {
+  font-size: 20px;
+  margin: 5px auto;
+  position: fixed;
+  top: 55%;
+  left: 30%;
+  width: 35%;
+
+}
+
+#userNameSubmit {
+  position: fixed;
+  top: 55%;
+  left: 67%;
+  height: 36px;
+}
+
+#nicknameInst {
+  position: fixed;
+  top: 10%;
+  left: 30%;
+  background-color: rgba(100,0,100,0.8);
+  width: 600px;
+}
