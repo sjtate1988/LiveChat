@@ -1,6 +1,12 @@
 # chatroomapp
 A simple chatroom app using socket.io
 
+Technologies used:
+- html and CSS
+- JavaScript
+- Node JS
+
+
 This is an express application which uses socket.io to make sockets for different clients in a chatroom.
 
 The key features of this application are:
